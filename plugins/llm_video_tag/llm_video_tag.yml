@@ -1,0 +1,58 @@
+name: LLMVideoTag
+description: Tags video scenes using a vision LLM with ffmpeg scene detection + evenly-spaced frame extraction.
+version: 0.1.0
+url: https://github.com/Jay4242/llm_video_tag/
+ui:
+  javascript:
+    - llm_video_tag.js
+  assets:
+    /results: results
+settings:
+  llmBaseUrl:
+    displayName: LLM Base URL
+    description: "HTTP base URL for the OpenAI-compatible endpoint (e.g. http://localhost:11434/v1)."
+    type: STRING
+  llmModel:
+    displayName: LLM Model
+    description: "Model name to use for tagging."
+    type: STRING
+  llmTemp:
+    displayName: Temperature
+    description: "Sampling temperature."
+    type: NUMBER
+  llmMaxTokens:
+    displayName: Max tokens
+    description: "Maximum tokens to request (-1 for backend default)."
+    type: NUMBER
+  llmTimeout:
+    displayName: LLM Timeout (seconds)
+    description: "Timeout for contacting the LLM server."
+    type: NUMBER
+  sceneThreshold:
+    displayName: Scene Detection Threshold
+    description: "Sensitivity of ffmpeg scene detection (0.0-1.0). Higher = fewer scene changes detected."
+    type: NUMBER
+  maxFrames:
+    displayName: Max Frames
+    description: "Maximum number of frames to extract and send to the LLM."
+    type: NUMBER
+  frameWidth:
+    displayName: Frame Width
+    description: "Resize extracted frames to this width in pixels (-1 to keep original size)."
+    type: NUMBER
+  includeTagDescriptions:
+    displayName: Include Tag Descriptions
+    description: Include tag descriptions alongside tag names in the LLM prompt to help the model choose more accurate tags.
+    type: BOOLEAN
+  includeTagImages:
+    displayName: Include Tag Images
+    description: Send each tag's custom image to help the LLM visually identify tags alongside their names. Only tags with a manually-set image are included; generated default placeholders are skipped.
+    type: BOOLEAN
+  zzdebugTracing:
+    displayName: Debug Tracing
+    description: Enable additional debug logs.
+    type: BOOLEAN
+exec:
+  - python
+  - "{pluginDir}/llm_video_tag.py"
+interface: raw

@@ -48,6 +48,10 @@ settings:
     displayName: Include Tag Images
     description: Send each tag's custom image to help the LLM visually identify tags alongside their names. Only tags with a manually-set image are included; generated default placeholders are skipped.
     type: BOOLEAN
+  maxTagImages:
+    displayName: Max Tag Images
+    description: "Maximum number of tag images to send to the LLM. 0 or -1 = unlimited. Only applies when Include Tag Images is enabled."
+    type: NUMBER
   zzdebugTracing:
     displayName: Debug Tracing
     description: Enable additional debug logs.

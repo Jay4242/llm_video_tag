@@ -189,6 +189,8 @@ INCLUDE_TAG_IMAGES: bool = _env_or_setting("includeTagImages", "LLM_INCLUDE_TAG_
 if isinstance(INCLUDE_TAG_IMAGES, str):
     INCLUDE_TAG_IMAGES = INCLUDE_TAG_IMAGES.strip().lower() in ("true", "1", "yes", "on")
 
+MAX_TAG_IMAGES: int = int(_env_or_setting("maxTagImages", "LLM_MAX_TAG_IMAGES", 50))
+
 
 def _check_ffmpeg() -> None:
     try:
@@ -459,10 +461,10 @@ def _build_messages(b64_frames: List[str], existing_tags: Optional[list[dict[str
         content: list[dict[str, Any]] = [{"type": "text", "text": f"EXISTING TAGS (provided as input context, these are NOT your output):\n\n{intro}\n\n{tag_text}"}]
 
         if use_images:
-            content.append({"type": "text", "text": "Note: the images above show the tag's representative image. This does NOT guarantee that the tag's content appears in the video — use your own judgment based on the video frames."})
+            content.append({"type": "text", "text": "Note: the images below show the tag's representative image. This does NOT guarantee that the tag's content appears in the video — use your own judgment based on the video frames."})
             tag_images_added = 0
             for tag in existing_tags:
-                if tag_images_added >= 50:
+                if MAX_TAG_IMAGES > 0 and tag_images_added >= MAX_TAG_IMAGES:
                     break
                 image_path = tag.get("image_path") or tag.get("imagePath")
                 name = tag.get("name", "")
@@ -488,7 +490,7 @@ def _build_messages(b64_frames: List[str], existing_tags: Optional[list[dict[str
 
     messages.append({
         "role": "user",
-        "content": [{"type": "text", "text": "The following are the frames from the video:"}],
+        "content": [{"type": "text", "text": "The following are the frames from the video to analyze:"}],
     })
 
     for i, b64 in enumerate(b64_frames):
